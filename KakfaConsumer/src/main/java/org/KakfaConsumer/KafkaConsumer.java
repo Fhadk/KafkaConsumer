@@ -1,10 +1,8 @@
 package org.KakfaConsumer;
 
-import org.KakfaConsumer.config.ApplicationContextConfig;
 import org.KakfaConsumer.dao.KafkaDao;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.BeanFactory;
-
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
@@ -12,13 +10,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class KafkaConsumer {
 	private Logger logger = Logger.getLogger(KafkaConsumer.class);
-	
-	ApplicationContextConfig ctx;
+	private ClassPathXmlApplicationContext ctx;
+	private KafkaDao dao;
+
 		
     @KafkaListener(topics = "${app.topic.foo}")
-    public void listen(@Payload String message) {	
+    public void listen(@Payload String message) {
+    	ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	dao = (KafkaDao) ctx.getBean("KafkaDao");
     	logger.info("Message: " + message);    	
-    	KafkaDao dao = (KafkaDao) ((BeanFactory) ctx.getCtx()).getBean("KafkaDao");
-    	dao.updateRecord(message);
+    	logger.info(" Record update status: " + dao.updateRecord(message));   
     }
 }

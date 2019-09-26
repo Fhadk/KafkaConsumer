@@ -5,7 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class KafkaDao {
 	private JdbcTemplate jdbcTemplate;
 	
-	public void updateRecord(String message) {
-		jdbcTemplate.update(message);
+	public int updateRecord(String message) {
+		return jdbcTemplate.update(message);
 	}
 }
