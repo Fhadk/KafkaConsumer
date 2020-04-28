@@ -1,0 +1,6 @@
+# Ignore all jar files
+*.jar
+*.jar.original
+*.properties
+*.yml
+*.xml
